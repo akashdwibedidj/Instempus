@@ -1,0 +1,179 @@
+{
+  "app": {
+    "name": "Instempus"
+  },
+  "nav": {
+    "home": "Home",
+    "messages": "Messages",
+    "applications": "Applications",
+    "dashboard": "Dashboard",
+    "gatepass": "Gate Pass",
+    "issues": "Issues",
+    "attendance": "Attendance",
+    "payments": "Payments",
+    "admin": "Admin",
+    "settings": "Settings",
+    "logout": "Log Out"
+  },
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "hod": "Head of Department",
+    "warden": "Warden",
+    "canteen": "Canteen",
+    "accounts": "Accounts",
+    "security": "Security",
+    "admin": "Admin",
+    "principal": "Principal"
+  },
+  "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
+    "email": "Email",
+    "password": "Password",
+    "rollNumber": "Roll Number",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "language": "Language",
+    "signIn": "Sign In",
+    "onboard": "Complete Setup",
+    "welcome": "Welcome to Instempus",
+    "subtitle": "Your campus, connected.",
+    "createAccount": "Create Account",
+    "role": "Role",
+    "noAccount": "New student? Create an account",
+    "haveAccount": "Already have an account? Sign in",
+    "staff": "Staff",
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "rollNotFound": "Roll number not found. Contact your admin.",
+      "networkError": "Network error. Please try again."
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "empty": "Nothing here yet.",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "submit": "Submit",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "pending": "Pending",
+    "approved": "Approved",
+    "declined": "Declined",
+    "open": "Open",
+    "resolved": "Resolved",
+    "viewAll": "View All",
+    "seeDetails": "See Details"
+  },
+  "applications": {
+    "title": "Applications",
+    "new": "New Application",
+    "myApplications": "My Applications",
+    "approvalQueue": "Approval Queue",
+    "status": {
+      "submitted": "Submitted",
+      "under_review": "Under Review",
+      "approved": "Approved",
+      "declined": "Declined",
+      "escalated": "Escalated",
+      "cancelled": "Cancelled"
+    },
+    "approve": "Approve",
+    "decline": "Decline",
+    "reason": "Reason",
+    "reasonPlaceholder": "Enter reason (required for decline)…",
+    "uniqueId": "Application ID",
+    "submittedOn": "Submitted on",
+    "approvedBy": "Approved by",
+    "empty": "No applications found."
+  },
+  "gatepass": {
+    "title": "Gate Pass",
+    "request": "Request Gate Pass",
+    "reason": "Reason for going out",
+    "outTime": "Expected out time",
+    "returnTime": "Expected return time",
+    "validUntil": "Valid until",
+    "status": {
+      "valid": "✓ Valid",
+      "expired": "✗ Expired",
+      "used": "✗ Already Used",
+      "pending": "Pending Approval"
+    },
+    "scanQR": "Scan Gate Pass QR",
+    "empty": "No gate passes yet."
+  },
+  "issues": {
+    "title": "Issues",
+    "new": "Report Issue",
+    "board": "Issue Board",
+    "facingThis": "Facing this too",
+    "addComment": "Add Comment",
+    "similarFound": "A similar issue already exists",
+    "viewExisting": "View existing issue",
+    "status": {
+      "open": "Open",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "empty": "No issues reported."
+  },
+  "notices": {
+    "title": "Notices",
+    "post": "Post Notice",
+    "targetGroup": "Target Group",
+    "readBy": "Read by",
+    "empty": "No notices yet."
+  },
+  "payments": {
+    "title": "Payments",
+    "upload": "Upload Payment Proof",
+    "status": {
+      "pending": "Pending Verification",
+      "confirmed": "Confirmed",
+      "rejected": "Rejected"
+    },
+    "receipt": "Download Receipt",
+    "empty": "No payment records."
+  },
+  "attendance": {
+    "title": "Attendance",
+    "mark": "Mark Attendance",
+    "present": "Present",
+    "absent": "Absent",
+    "late": "Late",
+    "percentage": "Attendance %",
+    "empty": "No attendance records."
+  },
+  "admin": {
+    "title": "Admin",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "org": "Organisation",
+    "settings": "Settings",
+    "auditLog": "Audit Log",
+    "pending": "Pending",
+    "ageing": "Ageing",
+    "workload": "Workload"
+  },
+  "validation": {
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordMin": "Password must be at least 8 characters.",
+    "nameRequired": "Enter your full name.",
+    "rollRequired": "Roll number is required.",
+    "phoneInvalid": "Enter a valid 10-digit mobile number.",
+    "roleInvalid": "Choose a valid role."
+  }
+}
