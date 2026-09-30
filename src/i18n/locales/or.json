@@ -1,11 +1,14 @@
 {
   "app": { "name": "Instempus" },
   "nav": {
-    "home": "ହୋମ", "messages": "ବାର୍ତ୍ତା", "applications": "ଆବେଦନ",
+    "home": "ହୋମ", "messages": "ବାର୍ତ୍ତା", "create": "ତିଆରି",
+    "services": "ସେବା", "profile": "ପ୍ରୋଫାଇଲ",
+    "applications": "ଆବେଦନ",
     "dashboard": "ଡ୍ୟାସବୋର୍ଡ", "gatepass": "ଗେଟ ପାସ", "issues": "ସମସ୍ୟା",
     "attendance": "ଉପସ୍ଥିତି", "payments": "ଦେୟ", "admin": "ଅଡ୍ମିନ",
     "settings": "ସେଟିଂ", "logout": "ଲଗ ଆଉଟ"
   },
+
   "roles": {
     "student": "ଛାତ୍ର", "teacher": "ଶିକ୍ଷକ", "hod": "ବିଭାଗ ମୁଖ୍ୟ",
     "warden": "ୱାର୍ଡ଼େନ", "canteen": "କ୍ୟାଣ୍ଟିନ", "accounts": "ଆକାଉଣ୍ଟ",
@@ -39,8 +42,10 @@
     "back": "ପଛକୁ", "next": "ପରବର୍ତ୍ତୀ", "search": "ଖୋଜ", "filter": "ଫିଲ୍ଟର",
     "all": "ସବୁ", "pending": "ବିଚାରାଧୀନ", "approved": "ଅନୁମୋଦିତ",
     "declined": "ପ୍ରତ୍ୟାଖ୍ୟାତ", "open": "ଖୋଲା", "resolved": "ସମାଧାନ",
-    "viewAll": "ସବୁ ଦେଖନ୍ତୁ", "seeDetails": "ବିବରଣ ଦେଖନ୍ତୁ"
+    "viewAll": "ସବୁ ଦେଖନ୍ତୁ", "seeDetails": "ବିବରଣ ଦେଖନ୍ତୁ",
+    "offline": "ଆପଣ ଅଫଲାଇନ ଅଛନ୍ତି — ସଂଯୁକ୍ତ ହେଲେ ସିଙ୍କ ହେବ।"
   },
+
   "applications": {
     "title": "ଆବେଦନ", "new": "ନୂଆ ଆବେଦନ", "myApplications": "ମୋ ଆବେଦନ",
     "approvalQueue": "ଅନୁମୋଦନ ସଜ",

@@ -47,6 +47,12 @@ export const ROUTES = {
 
   // Chatbot
   CHATBOT:        '/chatbot',
+
+  // Phase 3 — Instagram nav
+  PROFILE:        '/profile',
+  SERVICES:       '/services',
+  SEARCH:         '/search',
+  NOTIFICATIONS:  '/notifications',
 } as const;
 
 export type RoutePath = typeof ROUTES[keyof typeof ROUTES];

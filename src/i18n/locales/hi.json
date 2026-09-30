@@ -1,7 +1,9 @@
 {
   "app": { "name": "Instempus" },
   "nav": {
-    "home": "होम", "messages": "संदेश", "applications": "आवेदन",
+    "home": "होम", "messages": "संदेश", "create": "बनाएं",
+    "services": "सेवाएं", "profile": "प्रोफ़ाइल",
+    "applications": "आवेदन",
     "dashboard": "डैशबोर्ड", "gatepass": "गेट पास", "issues": "समस्याएँ",
     "attendance": "उपस्थिति", "payments": "भुगतान", "admin": "व्यवस्थापक",
     "settings": "सेटिंग्स", "logout": "लॉग आउट"
@@ -40,7 +42,8 @@
     "back": "वापस", "next": "अगला", "search": "खोजें", "filter": "फ़िल्टर",
     "all": "सभी", "pending": "लंबित", "approved": "स्वीकृत",
     "declined": "अस्वीकृत", "open": "खुला", "resolved": "हल", "viewAll": "सभी देखें",
-    "seeDetails": "विवरण देखें"
+    "seeDetails": "विवरण देखें",
+    "offline": "आप ऑफ़लाइन हैं — कनेक्ट होने पर सिंक होगा।"
   },
   "applications": {
     "title": "आवेदन", "new": "नया आवेदन", "myApplications": "मेरे आवेदन",

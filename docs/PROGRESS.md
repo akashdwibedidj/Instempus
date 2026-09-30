@@ -1,9 +1,9 @@
 # PROGRESS — Instempus
 
-Last updated: 2026-09-30 21:40 IST
-Current phase: 3 — App Shell & UI Kit (Ready to start)
-Last completed task: Phase 2 — Auth & Roles fully verified end-to-end in the browser! (Supabase auth, RLS recursion resolution, student onboarding with RPC, session store, i18n, redirect to /home).
-NEXT STEP (exact): Phase 3, Task 1 — Build the AppShell layout (`src/components/layout/AppShell.tsx`: desktop glassmorphic sidebar + mobile bottom navigation bar + top app bar + notification badge) and wire authenticated routes into it.
+Last updated: 2026-09-30 23:30 IST
+Current phase: 3 — App Shell & UI Kit (In Progress)
+Last completed task: Phase 3, Task 2 — UI Component Kit built: Button (4 variants/3 sizes/loading), Input (label/error/helper/icons), Card (glass-card), Badge (RoleBadge + StatusPill with colour maps), Avatar (5 sizes/initials/role dot), Spinner, Skeleton (shimmer), EmptyState, Modal (Esc+backdrop), Tabs (segmented), OfflineBanner. All wired into AppShell. Zero TS errors.
+NEXT STEP (exact): Phase 3, Task 3 — Build the rich Home feed page (`src/pages/HomePage.tsx`): "Important" strip (story bubbles for urgent/pinned), hashtag filter chips row, mock PostCard feed (PostCard component: Avatar + RoleBadge + time + target-group chip + body + Got-it button + seen count), Skeleton loading state, EmptyState when feed is empty.
 
 ---
 
@@ -22,10 +22,10 @@ NEXT STEP (exact): Phase 3, Task 1 — Build the AppShell layout (`src/component
     - `020_fix_profile_rls_recursion.sql`: Converted `current_user_role()`, `current_user_dept_id()`, `current_user_hostel_id()` to `LANGUAGE plpgsql SECURITY DEFINER` to prevent inlining and 42P17 infinite recursion.
     - Updated `onboard_student` RPC to auto-provision pre-registrations gracefully and seed demo students (`2501CSE001` - `2501CSE020`).
   - [x] Verified live: User onboarding completed and redirected successfully to `/home`.
-- [ ] **Phase 3 — App Shell & UI Kit (NEXT)**:
-  - [ ] AppShell layout (desktop sidebar + mobile bottom nav + top header).
-  - [ ] UI Component Kit (`Button`, `Input`, `Card`, `Badge`, `Modal`, `Tabs`, `Avatar`, `EmptyState`, `Spinner`).
-  - [ ] Rich Home Page (Announcements & Notices feed, Quick Actions, Role Dashboard widgets).
+- [ ] **Phase 3 — App Shell & UI Kit (IN PROGRESS)**:
+  - [x] Task 1 — AppShell layout (Instagram-style, Capacitor-ready: 5-tab bottom nav, desktop sidebar lg+, role overrides).
+  - [x] Task 2 — UI Component Kit (Button, Input, Card, Badge/RoleBadge/StatusPill, Avatar, Spinner, Skeleton, EmptyState, Modal, Tabs, OfflineBanner).
+  - [ ] Task 3 — Rich Home Page (Important strip, hashtag chips, PostCard feed, skeleton loading, mock data).
 - [ ] **Phase 4 — Applications Engine**: Multi-step approval workflows (Leave, Gate Pass, Hostel Leave) with QR verification.
 - [ ] **Phase 5 — Issues Board**: Upvoting, hostel/canteen scope filtering, duplicate detection.
 - [ ] **Phase 6 — Communications**: Department notices, group channels, direct messaging.

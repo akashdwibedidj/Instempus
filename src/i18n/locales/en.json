@@ -5,6 +5,9 @@
   "nav": {
     "home": "Home",
     "messages": "Messages",
+    "create": "Create",
+    "services": "Services",
+    "profile": "Profile",
     "applications": "Applications",
     "dashboard": "Dashboard",
     "gatepass": "Gate Pass",
@@ -82,7 +85,8 @@
     "open": "Open",
     "resolved": "Resolved",
     "viewAll": "View All",
-    "seeDetails": "See Details"
+    "seeDetails": "See Details",
+    "offline": "You're offline — changes will sync when reconnected."
   },
   "applications": {
     "title": "Applications",

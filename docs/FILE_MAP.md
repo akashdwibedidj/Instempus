@@ -57,7 +57,7 @@ src/app/featureRegistry.ts        — FeatureManifest[] registry; routes added p
 
 src/config/env.ts                 — typed env variable access
 src/config/features.ts            — feature flags (on/off)
-src/config/navigation.ts          — nav builder from featureRegistry + user role
+src/config/navigation.ts          — NavItem definitions per role; getMobileNavItems / getSidebarItems helpers
 
 src/constants/roles.ts            — role string literals
 src/constants/permissions.ts      — permission key constants + role→permissions map
@@ -80,9 +80,10 @@ src/components/ui/Modal.tsx       — design-system Modal
 src/components/ui/Tabs.tsx        — design-system Tabs
 src/components/ui/Table.tsx       — design-system Table
 src/components/ui/Avatar.tsx      — design-system Avatar
-src/components/layout/AppShell.tsx    — main layout wrapper
-src/components/layout/Sidebar.tsx     — desktop sidebar nav
-src/components/layout/BottomNav.tsx   — mobile bottom navigation
+src/components/layout/AppShell.tsx    — authenticated layout wrapper (Sidebar + TopBar + Outlet + BottomNav)
+src/components/layout/Sidebar.tsx     — desktop glassmorphic sidebar + SidebarContent (shared with mobile)
+src/components/layout/TopBar.tsx      — top app bar: hamburger toggle, app name, notification bell badge
+src/components/layout/BottomNav.tsx   — mobile bottom navigation (top-5 role-filtered items)
 src/components/layout/RoleGuard.tsx   — renders children only if role has permission
 src/components/feedback/AsyncBoundary.tsx — ErrorBoundary + Suspense combo
 src/components/feedback/EmptyState.tsx    — empty list/data state
