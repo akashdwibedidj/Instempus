@@ -48,6 +48,15 @@
       "invalidCredentials": "Invalid email or password.",
       "rollNotFound": "Roll number not found. Contact your admin.",
       "networkError": "Network error. Please try again."
+    },
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordMin": "Password must be at least 6 characters.",
+      "nameRequired": "Enter your full name.",
+      "rollRequired": "Roll number is required.",
+      "phoneInvalid": "Enter a valid 10-digit mobile number.",
+      "roleInvalid": "Choose a valid role."
     }
   },
   "common": {

@@ -1,81 +1,55 @@
-// features/auth/services/authService.ts
-// Handles Supabase Auth operations. Only this file (and supabaseClient) touch auth.
-// No Supabase imports outside src/lib — this service is the single boundary.
-
+// authService.ts — the ONLY file in the auth feature that imports supabaseClient.
+// All Supabase auth operations live here; hooks and components never call supabase directly.
 import { supabase } from '@/lib/supabaseClient';
-import { AppError, toAppError } from '@/lib/errors';
-import type { Session, User } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
 
-export interface AuthCredentials {
+export interface LoginInput {
   email: string;
   password: string;
 }
 
-export interface AuthResult {
-  user: User;
-  session: Session;
-}
-
-/** Sign in with email + password. Throws AppError on failure. */
-export async function login({ email, password }: AuthCredentials): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    if (error.message.toLowerCase().includes('invalid')) {
-      throw new AppError('UNAUTHORIZED', 'Invalid email or password.');
-    }
-    throw new AppError('SERVER', error.message, error.code ?? undefined);
-  }
-  if (!data.session || !data.user) {
-    throw new AppError('SERVER', 'Login succeeded but no session returned.');
-  }
-  return { user: data.user, session: data.session };
-}
-
-/** Sign out the current user. */
-export async function logout(): Promise<void> {
-  const { error } = await supabase.auth.signOut();
-  if (error) throw toAppError(error);
-}
-
-/** Returns the current active session, or null if not logged in. */
-export async function getSession(): Promise<Session | null> {
-  const { data, error } = await supabase.auth.getSession();
-  if (error) throw toAppError(error);
-  return data.session;
-}
-
-/** Returns the current user, or null. */
-export async function getCurrentUser(): Promise<User | null> {
-  const { data, error } = await supabase.auth.getUser();
-  if (error) return null;
+/** Sign in with email + password. Throws AuthError on failure. */
+export async function login(input: LoginInput): Promise<User> {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: input.email,
+    password: input.password,
+  });
+  if (error) throw error;
   return data.user;
 }
 
-/**
- * Self-registration for students (email + password).
- * Staff are created via admin invite flow (Phase 8).
- * Throws AppError if the email already exists.
- */
-export async function signUp({ email, password }: AuthCredentials): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) {
-    if (error.message.toLowerCase().includes('already')) {
-      throw new AppError('CONFLICT', 'An account with this email already exists.');
-    }
-    throw new AppError('SERVER', error.message, error.code ?? undefined);
-  }
-  if (!data.session || !data.user) {
-    // Email confirmation required (Supabase setting)
-    throw new AppError('VALIDATION', 'Please check your email to confirm your account.');
-  }
-  return { user: data.user, session: data.session };
+/** Create a new Supabase auth account (email + password).
+ *  Email confirmation is typically disabled for demo; enable in Supabase Auth settings. */
+export async function signUp(input: LoginInput): Promise<User | null> {
+  const { data, error } = await supabase.auth.signUp({
+    email: input.email,
+    password: input.password,
+  });
+  if (error) throw error;
+  return data.user ?? null;
 }
 
-/** Subscribe to auth state changes. Returns the unsubscribe function. */
+/** Sign out the current user and clear the Supabase session. */
+export async function logout(): Promise<void> {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+}
+
+/** Return the active session, or null if unauthenticated. */
+export async function getSession() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  return data.session;
+}
+
+/** Subscribe to auth state changes. Returns an unsubscribe function.
+ *  Must be called exactly once — from useAuthListener, mounted in providers.tsx. */
 export function onAuthStateChange(
   callback: (user: User | null) => void,
 ): () => void {
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => {
     callback(session?.user ?? null);
   });
   return () => subscription.unsubscribe();

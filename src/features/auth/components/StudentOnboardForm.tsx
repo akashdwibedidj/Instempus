@@ -1,23 +1,14 @@
-// StudentOnboardForm.tsx — profile step for a signed-in student with no profile yet.
-import { Controller, useForm } from 'react-hook-form';
+// StudentOnboardForm.tsx — roll-no + name + phone + language form for new students.
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
-import { useSessionStore } from '@/app/sessionStore';
 import { useOnboarding } from '../hooks/useOnboarding';
 import { studentOnboardSchema, type StudentOnboardInput } from '../schemas';
 import { LanguagePicker } from './LanguagePicker';
-import {
-  inputClass,
-  labelClass,
-  errorClass,
-  formErrorClass,
-  primaryButtonClass,
-} from './formStyles';
 
 export function StudentOnboardForm() {
-  const { t, i18n } = useTranslation();
-  const language = useSessionStore((s) => s.language);
-  const { completeStudent, isCompletingStudent, studentError } = useOnboarding();
+  const { t } = useTranslation();
+  const { submitStudent, isSubmittingStudent, studentError } = useOnboarding();
 
   const {
     register,
@@ -26,76 +17,80 @@ export function StudentOnboardForm() {
     formState: { errors },
   } = useForm<StudentOnboardInput>({
     resolver: zodResolver(studentOnboardSchema),
-    defaultValues: { rollNo: '', name: '', phone: '', languagePref: language },
+    defaultValues: { language: 'en' },
   });
 
-  const onSubmit = async (values: StudentOnboardInput): Promise<void> => {
-    try {
-      await completeStudent(values);
-    } catch {
-      // error text is exposed by the hook (studentError)
-    }
+  const onSubmit = async (data: StudentOnboardInput) => {
+    try { await submitStudent(data); } catch { /* error shown via studentError */ }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div>
-        <label htmlFor="rollNo" className={labelClass}>{t('auth.rollNumber')}</label>
+        <label htmlFor="sof-roll" className="block text-sm font-medium mb-1 text-gray-200">
+          {t('auth.rollNumber')}
+        </label>
         <input
-          id="rollNo"
-          autoCapitalize="characters"
-          className={inputClass}
+          id="sof-roll"
           {...register('rollNo')}
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder-gray-500 uppercase focus:border-violet-500 focus:outline-none"
+          placeholder="e.g. 2501CSE001"
         />
-        {errors.rollNo?.message && (
-          <p className={errorClass}>{t(errors.rollNo.message)}</p>
+        {errors.rollNo && (
+          <p className="mt-1 text-xs text-red-400">{t(errors.rollNo.message ?? '')}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="name" className={labelClass}>{t('auth.name')}</label>
-        <input id="name" autoComplete="name" className={inputClass} {...register('name')} />
-        {errors.name?.message && (
-          <p className={errorClass}>{t(errors.name.message)}</p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="phone" className={labelClass}>{t('auth.phone')}</label>
+        <label htmlFor="sof-name" className="block text-sm font-medium mb-1 text-gray-200">
+          {t('auth.name')}
+        </label>
         <input
-          id="phone"
-          type="tel"
-          inputMode="numeric"
-          autoComplete="tel"
-          className={inputClass}
-          {...register('phone')}
+          id="sof-name"
+          {...register('name')}
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none"
+          placeholder="Full Name"
         />
-        {errors.phone?.message && (
-          <p className={errorClass}>{t(errors.phone.message)}</p>
+        {errors.name && (
+          <p className="mt-1 text-xs text-red-400">{t(errors.name.message ?? '')}</p>
         )}
       </div>
 
       <div>
-        <span className={labelClass}>{t('auth.language')}</span>
-        <Controller
-          name="languagePref"
-          control={control}
-          render={({ field }) => (
-            <LanguagePicker
-              value={field.value}
-              onChange={(lang) => {
-                field.onChange(lang);
-                void i18n.changeLanguage(lang); // preview immediately
-              }}
-            />
-          )}
+        <label htmlFor="sof-phone" className="block text-sm font-medium mb-1 text-gray-200">
+          {t('auth.phone')} <span className="text-gray-500">(optional)</span>
+        </label>
+        <input
+          id="sof-phone"
+          type="tel"
+          {...register('phone')}
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder-gray-500 focus:border-violet-500 focus:outline-none"
+          placeholder="10-digit mobile"
         />
+        {errors.phone && (
+          <p className="mt-1 text-xs text-red-400">{t(errors.phone.message ?? '')}</p>
+        )}
       </div>
 
-      {studentError && <p className={formErrorClass} role="alert">{studentError}</p>}
+      <Controller
+        name="language"
+        control={control}
+        render={({ field }) => (
+          <LanguagePicker value={field.value} onChange={field.onChange} />
+        )}
+      />
 
-      <button type="submit" disabled={isCompletingStudent} className={primaryButtonClass}>
-        {isCompletingStudent ? t('common.loading') : t('auth.onboard')}
+      {studentError && (
+        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">{studentError}</p>
+      )}
+
+      <button
+        type="submit"
+        id="sof-submit"
+        disabled={isSubmittingStudent}
+        className="w-full rounded-lg bg-violet-600 py-2.5 font-semibold text-white hover:bg-violet-500 disabled:opacity-50 transition-colors"
+      >
+        {isSubmittingStudent ? t('common.loading') : t('auth.onboard')}
       </button>
     </form>
   );

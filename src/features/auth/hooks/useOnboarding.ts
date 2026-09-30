@@ -1,84 +1,68 @@
-// useOnboarding.ts — sign-up + profile creation for students and staff.
-// Flow: signUpStudent() → (listener sets status 'needs_onboarding')
-//       → completeStudent() / completeStaff() → store becomes 'authenticated'.
+// useOnboarding.ts — mutations for completing student / staff onboarding.
 import { useMutation } from '@tanstack/react-query';
+import { useSessionStore, toLanguage } from '@/app/sessionStore';
+import { getErrorMessage } from '@/lib/errors';
 import i18n from '@/i18n';
 import type { Role } from '@/constants/roles';
-import { useSessionStore, toLanguage } from '@/app/sessionStore';
-import { AppError, getErrorMessage } from '@/lib/errors';
-import { signUp } from '../services/authService';
 import {
-    onboardStudent,
-    onboardStaff,
-    type getProfile,
+  completeStudentOnboarding,
+  completeStaffOnboarding,
 } from '../services/onboardingService';
-import type {
-    LoginInput,
-    StudentOnboardInput,
-    StaffOnboardInput,
-} from '../schemas';
+import type { StudentOnboardInput, StaffOnboardInput } from '../services/onboardingService';
 
-type Profile = NonNullable<Awaited<ReturnType<typeof getProfile>>>;
+export function useOnboarding() {
+  const userId = useSessionStore((s) => s.userId);
+  const setAuthenticated = useSessionStore((s) => s.setAuthenticated);
 
-function requireUserId(): string {
-    const userId = useSessionStore.getState().userId;
-    if (!userId) throw new AppError('UNAUTHORIZED', 'Please sign in first.');
-    return userId;
-}
-
-// onboarding doesn't trigger an auth event, so we update the store ourselves
-function applyProfile(profile: Profile): void {
-    const language = toLanguage(profile.language_pref);
-    useSessionStore.getState().setAuthenticated({
+  const studentMutation = useMutation({
+    mutationFn: async (input: StudentOnboardInput) => {
+      if (!userId) throw new Error('No active session');
+      const profile = await completeStudentOnboarding(userId, input);
+      return profile;
+    },
+    onSuccess: (profile) => {
+      const language = toLanguage(profile.language_pref);
+      setAuthenticated({
         userId: profile.id,
         role: profile.role as Role,
         name: profile.name,
         language,
-    });
-    void i18n.changeLanguage(language);
-}
+      });
+      void i18n.changeLanguage(language);
+    },
+  });
 
-export function useOnboarding() {
-    const signUpMutation = useMutation({
-        mutationFn: (values: LoginInput) => signUp(values),
-    });
+  const staffMutation = useMutation({
+    mutationFn: async (input: StaffOnboardInput) => {
+      if (!userId) throw new Error('No active session');
+      const profile = await completeStaffOnboarding(userId, input);
+      return profile;
+    },
+    onSuccess: (profile) => {
+      const language = toLanguage(profile.language_pref);
+      setAuthenticated({
+        userId: profile.id,
+        role: profile.role as Role,
+        name: profile.name,
+        language,
+      });
+      void i18n.changeLanguage(language);
+    },
+  });
 
-    const studentMutation = useMutation({
-        mutationFn: (values: StudentOnboardInput) =>
-            onboardStudent({
-                userId: requireUserId(),
-                rollNo: values.rollNo,
-                name: values.name,
-                ...(values.phone ? { phone: values.phone } : {}),
-                languagePref: values.languagePref,
-            }),
-        onSuccess: applyProfile,
-    });
+  return {
+    // student
+    submitStudent:        studentMutation.mutateAsync,
+    isSubmittingStudent:  studentMutation.isPending,
+    studentError:         studentMutation.error
+      ? getErrorMessage(studentMutation.error)
+      : null,
 
-    const staffMutation = useMutation({
-        mutationFn: (values: StaffOnboardInput) =>
-            onboardStaff({
-                userId: requireUserId(),
-                name: values.name,
-                role: values.role,
-                ...(values.deptId ? { deptId: values.deptId } : {}),
-                ...(values.phone ? { phone: values.phone } : {}),
-                languagePref: values.languagePref,
-            }),
-        onSuccess: applyProfile,
-    });
-
-    return {
-        signUpStudent: signUpMutation.mutateAsync,
-        isSigningUp: signUpMutation.isPending,
-        signUpError: signUpMutation.error ? getErrorMessage(signUpMutation.error) : null,
-
-        completeStudent: studentMutation.mutateAsync,
-        isCompletingStudent: studentMutation.isPending,
-        studentError: studentMutation.error ? getErrorMessage(studentMutation.error) : null,
-
-        completeStaff: staffMutation.mutateAsync,
-        isCompletingStaff: staffMutation.isPending,
-        staffError: staffMutation.error ? getErrorMessage(staffMutation.error) : null,
-    };
+    // staff
+    submitStaff:          staffMutation.mutateAsync,
+    isSubmittingStaff:    staffMutation.isPending,
+    staffError:           staffMutation.error
+      ? getErrorMessage(staffMutation.error)
+      : null,
+  };
 }

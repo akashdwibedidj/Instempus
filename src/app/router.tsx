@@ -1,4 +1,4 @@
-// router.tsx — builds react-router routes from featureRegistry
+// router.tsx — builds react-router routes from featureRegistry.
 import { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { RoleGuard } from '@/components/layout/RoleGuard';
@@ -12,7 +12,7 @@ const Fallback = () => (
 );
 
 function buildRouter() {
-  const children = featureRegistry.flatMap((f) =>
+  const featureRoutes = featureRegistry.flatMap((f) =>
     f.routes.map(({ path, component: Page, roles }) => ({
       path,
       element: (
@@ -30,14 +30,15 @@ function buildRouter() {
   );
 
   return createBrowserRouter([
-    {
-      path: ROUTES.ROOT,
-      element: <Navigate to={ROUTES.HOME} replace />,
-    },
-    ...children,
+    { path: ROUTES.ROOT, element: <Navigate to={ROUTES.LOGIN} replace /> },
+    ...featureRoutes,
     {
       path: '*',
-      element: <div className="p-8 text-center text-gray-500">404 — Page not found</div>,
+      element: (
+        <div className="flex h-screen items-center justify-center text-gray-500">
+          404 — Page not found
+        </div>
+      ),
     },
   ]);
 }

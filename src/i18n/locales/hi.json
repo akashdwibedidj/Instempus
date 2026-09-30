@@ -1,0 +1,94 @@
+{
+  "app": { "name": "Instempus" },
+  "nav": {
+    "home": "होम", "messages": "संदेश", "applications": "आवेदन",
+    "dashboard": "डैशबोर्ड", "gatepass": "गेट पास", "issues": "समस्याएँ",
+    "attendance": "उपस्थिति", "payments": "भुगतान", "admin": "व्यवस्थापक",
+    "settings": "सेटिंग्स", "logout": "लॉग आउट"
+  },
+  "roles": {
+    "student": "छात्र", "teacher": "शिक्षक", "hod": "विभागाध्यक्ष",
+    "warden": "वार्डन", "canteen": "कैंटीन", "accounts": "लेखा",
+    "security": "सुरक्षा", "admin": "व्यवस्थापक", "principal": "प्रधानाचार्य"
+  },
+  "auth": {
+    "login": "लॉग इन", "logout": "लॉग आउट", "email": "ईमेल",
+    "password": "पासवर्ड", "rollNumber": "रोल नंबर", "name": "पूरा नाम",
+    "phone": "मोबाइल नंबर", "language": "भाषा", "signIn": "साइन इन करें",
+    "onboard": "सेटअप पूरा करें", "welcome": "Instempus में आपका स्वागत है",
+    "subtitle": "आपका कैंपस, जुड़ा हुआ।", "createAccount": "खाता बनाएं",
+    "role": "भूमिका", "noAccount": "नए छात्र? खाता बनाएं",
+    "haveAccount": "पहले से खाता है? साइन इन करें", "staff": "स्टाफ",
+    "errors": {
+      "invalidCredentials": "अमान्य ईमेल या पासवर्ड।",
+      "rollNotFound": "रोल नंबर नहीं मिला। एडमिन से संपर्क करें।",
+      "networkError": "नेटवर्क त्रुटि। पुनः प्रयास करें।"
+    },
+    "validation": {
+      "emailRequired": "ईमेल आवश्यक है।", "emailInvalid": "वैध ईमेल दर्ज करें।",
+      "passwordMin": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।",
+      "nameRequired": "पूरा नाम दर्ज करें।", "rollRequired": "रोल नंबर आवश्यक है।",
+      "phoneInvalid": "10 अंकों का मोबाइल नंबर दर्ज करें।",
+      "roleInvalid": "वैध भूमिका चुनें।"
+    }
+  },
+  "common": {
+    "loading": "लोड हो रहा है…", "error": "कुछ गलत हो गया।",
+    "empty": "अभी यहाँ कुछ नहीं।", "retry": "पुनः प्रयास", "cancel": "रद्द करें",
+    "confirm": "पुष्टि करें", "submit": "जमा करें", "save": "सहेजें",
+    "delete": "हटाएं", "edit": "संपादित करें", "close": "बंद करें",
+    "back": "वापस", "next": "अगला", "search": "खोजें", "filter": "फ़िल्टर",
+    "all": "सभी", "pending": "लंबित", "approved": "स्वीकृत",
+    "declined": "अस्वीकृत", "open": "खुला", "resolved": "हल", "viewAll": "सभी देखें",
+    "seeDetails": "विवरण देखें"
+  },
+  "applications": {
+    "title": "आवेदन", "new": "नया आवेदन", "myApplications": "मेरे आवेदन",
+    "approvalQueue": "अनुमोदन कतार",
+    "status": { "submitted": "जमा", "under_review": "समीक्षा में", "approved": "स्वीकृत",
+      "declined": "अस्वीकृत", "escalated": "एस्केलेट", "cancelled": "रद्द" },
+    "approve": "स्वीकृत करें", "decline": "अस्वीकृत करें",
+    "reason": "कारण", "reasonPlaceholder": "कारण दर्ज करें (अस्वीकृति के लिए आवश्यक)…",
+    "uniqueId": "आवेदन आईडी", "submittedOn": "पर जमा", "approvedBy": "द्वारा स्वीकृत",
+    "empty": "कोई आवेदन नहीं मिला।"
+  },
+  "issues": {
+    "title": "समस्याएँ", "new": "समस्या रिपोर्ट करें", "board": "समस्या बोर्ड",
+    "facingThis": "मैं भी यह सामना कर रहा हूँ", "addComment": "टिप्पणी जोड़ें",
+    "similarFound": "ऐसी ही समस्या पहले से मौजूद है", "viewExisting": "मौजूदा देखें",
+    "status": { "open": "खुला", "in_progress": "प्रगति में", "resolved": "हल", "closed": "बंद" },
+    "empty": "कोई समस्या रिपोर्ट नहीं।"
+  },
+  "payments": {
+    "title": "भुगतान", "upload": "भुगतान प्रमाण अपलोड करें",
+    "status": { "pending": "सत्यापन लंबित", "confirmed": "पुष्टि", "rejected": "अस्वीकृत" },
+    "receipt": "रसीद डाउनलोड करें", "empty": "कोई भुगतान रिकॉर्ड नहीं।"
+  },
+  "attendance": {
+    "title": "उपस्थिति", "mark": "उपस्थिति दर्ज करें", "present": "उपस्थित",
+    "absent": "अनुपस्थित", "late": "देर से", "percentage": "उपस्थिति %",
+    "empty": "कोई उपस्थिति रिकॉर्ड नहीं।"
+  },
+  "notices": {
+    "title": "सूचनाएँ", "post": "सूचना पोस्ट करें", "targetGroup": "लक्ष्य समूह",
+    "readBy": "पढ़ा गया", "empty": "अभी कोई सूचना नहीं।"
+  },
+  "gatepass": {
+    "title": "गेट पास", "request": "गेट पास अनुरोध", "reason": "बाहर जाने का कारण",
+    "outTime": "बाहर जाने का समय", "returnTime": "वापसी का समय",
+    "validUntil": "तक वैध",
+    "status": { "valid": "✓ वैध", "expired": "✗ समाप्त", "used": "✗ पहले से उपयोग", "pending": "अनुमोदन लंबित" },
+    "scanQR": "गेट पास QR स्कैन करें", "empty": "अभी कोई गेट पास नहीं।"
+  },
+  "admin": {
+    "title": "व्यवस्थापक", "dashboard": "डैशबोर्ड", "users": "उपयोगकर्ता",
+    "org": "संगठन", "settings": "सेटिंग्स", "auditLog": "ऑडिट लॉग",
+    "pending": "लंबित", "ageing": "पुराने", "workload": "कार्यभार"
+  },
+  "validation": {
+    "emailRequired": "ईमेल आवश्यक है।", "emailInvalid": "वैध ईमेल दर्ज करें।",
+    "passwordMin": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए।",
+    "nameRequired": "पूरा नाम दर्ज करें।", "rollRequired": "रोल नंबर आवश्यक है।",
+    "phoneInvalid": "10 अंकों का मोबाइल नंबर दर्ज करें।", "roleInvalid": "वैध भूमिका चुनें।"
+  }
+}

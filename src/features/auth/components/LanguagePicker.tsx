@@ -1,42 +1,41 @@
+// LanguagePicker.tsx — three-button language selector (en / hi / or).
+import { useTranslation } from 'react-i18next';
 
-// LanguagePicker.tsx — three-way language toggle (controlled).
-import type { Language } from '@/app/sessionStore';
-
-// Native names on purpose: each language is shown in its own script.
-const LANGUAGES: { code: Language; label: string }[] = [
+const LANGS = [
   { code: 'en', label: 'English' },
   { code: 'hi', label: 'हिन्दी' },
   { code: 'or', label: 'ଓଡ଼ିଆ' },
-];
+] as const;
 
-interface LanguagePickerProps {
-  value: Language;
-  onChange: (language: Language) => void;
+interface Props {
+  value: string;
+  onChange: (lang: string) => void;
 }
 
-export function LanguagePicker({ value, onChange }: LanguagePickerProps) {
+export function LanguagePicker({ value, onChange }: Props) {
+  const { t } = useTranslation();
   return (
-    <div role="radiogroup" className="grid grid-cols-3 gap-2">
-      {LANGUAGES.map(({ code, label }) => {
-        const active = code === value;
-        return (
+    <div>
+      <label className="block text-sm font-medium mb-2 text-gray-200">
+        {t('auth.language')}
+      </label>
+      <div className="flex gap-2">
+        {LANGS.map(({ code, label }) => (
           <button
             key={code}
             type="button"
-            role="radio"
-            aria-checked={active}
+            id={`lang-${code}`}
             onClick={() => onChange(code)}
-            className={
-              'rounded-xl border px-3 py-2 text-sm transition ' +
-              (active
-                ? 'border-indigo-400 bg-indigo-500/30 text-white'
-                : 'border-white/20 bg-white/5 text-white/70 hover:bg-white/10')
-            }
+            className={`flex-1 rounded-lg border py-2 text-sm font-medium transition-colors ${
+              value === code
+                ? 'border-violet-500 bg-violet-600 text-white'
+                : 'border-white/10 bg-white/5 text-gray-300 hover:border-violet-400'
+            }`}
           >
             {label}
           </button>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }

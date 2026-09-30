@@ -1,129 +1,96 @@
-// features/auth/services/onboardingService.ts
-// Handles post-signup onboarding: roll-number validation + profile creation.
-// Rule: no Supabase imports in components — this is the only onboarding data boundary.
-
+// onboardingService.ts — profile reads/writes and pre-registration check.
+// Only file (besides authService) that imports supabaseClient inside the auth feature.
 import { supabase } from '@/lib/supabaseClient';
-import { AppError, toAppError } from '@/lib/errors';
-import type { Database } from '@/types/database';
 
-type ProfileRow    = Database['public']['Tables']['profiles']['Row'];
-type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
+// ─── types ────────────────────────────────────────────────────────────────────
 
-export interface StudentOnboardPayload {
-  userId: string;
+export interface Profile {
+  id: string;
+  role: string;
+  name: string;
+  phone: string | null;
+  roll_no: string | null;
+  dept_id: string | null;
+  hostel_id: string | null;
+  language_pref: string;
+  onboarded_at: string | null;
+}
+
+export interface StudentOnboardInput {
   rollNo: string;
   name: string;
   phone?: string;
-  languagePref?: 'en' | 'hi' | 'or';
+  language: string;
 }
 
-export interface StaffOnboardPayload {
-  userId: string;
+export interface StaffOnboardInput {
   name: string;
-  role: ProfileRow['role'];
-  deptId?: string;
   phone?: string;
-  languagePref?: 'en' | 'hi' | 'or';
+  language: string;
 }
 
-/**
- * Validates that a roll number exists in pre_registered_students
- * and has not yet been used. Throws AppError if invalid.
- */
-export async function validateRollNo(rollNo: string): Promise<{
-  deptId: string;
-  year: number;
-  section: string;
-  academicYear: string;
-}> {
-  const { data, error } = await supabase
-    .from('pre_registered_students')
-    .select('dept_id, year, section, academic_year, used')
-    .eq('roll_no', rollNo.trim().toUpperCase())
-    .single();
+// ─── functions ────────────────────────────────────────────────────────────────
 
-  if (error || !data) {
-    throw new AppError('NOT_FOUND', 'Roll number not found. Contact your admin.');
-  }
-  if (data.used) {
-    throw new AppError('CONFLICT', 'This roll number is already registered.');
-  }
-  return {
-    deptId:       data.dept_id,
-    year:         data.year,
-    section:      data.section,
-    academicYear: data.academic_year,
-  };
-}
-
-/**
- * Creates or updates the profile for a student after signup.
- * Also marks the roll number as used.
- */
-export async function onboardStudent(payload: StudentOnboardPayload): Promise<ProfileRow> {
-  // Validate roll number first
-  const reg = await validateRollNo(payload.rollNo);
-
-  const insert: ProfileInsert = {
-    id:            payload.userId,
-    role:          'student',
-    name:          payload.name.trim(),
-    roll_no:       payload.rollNo.trim().toUpperCase(),
-    phone:         payload.phone ?? null,
-    dept_id:       reg.deptId,
-    language_pref: payload.languagePref ?? 'en',
-    onboarded_at:  new Date().toISOString(),
-  };
-
+/** Fetch profile row for an auth user. Returns null if not yet created (new student). */
+export async function getProfile(userId: string): Promise<Profile | null> {
   const { data, error } = await supabase
     .from('profiles')
-    .upsert(insert, { onConflict: 'id' })
-    .select()
-    .single();
-
-  if (error) throw toAppError(error);
-  if (!data) throw new AppError('SERVER', 'Profile creation failed.');
-  return data;
-}
-
-/**
- * Creates or updates the profile for a staff member (admin-initiated).
- * Role must not be 'student' — use onboardStudent for students.
- */
-export async function onboardStaff(payload: StaffOnboardPayload): Promise<ProfileRow> {
-  if (payload.role === 'student') {
-    throw new AppError('VALIDATION', 'Use onboardStudent() for students.');
-  }
-
-  const insert: ProfileInsert = {
-    id:            payload.userId,
-    role:          payload.role,
-    name:          payload.name.trim(),
-    phone:         payload.phone ?? null,
-    dept_id:       payload.deptId ?? null,
-    language_pref: payload.languagePref ?? 'en',
-    onboarded_at:  new Date().toISOString(),
-  };
-
-  const { data, error } = await supabase
-    .from('profiles')
-    .upsert(insert, { onConflict: 'id' })
-    .select()
-    .single();
-
-  if (error) throw toAppError(error);
-  if (!data) throw new AppError('SERVER', 'Profile creation failed.');
-  return data;
-}
-
-/** Fetches the profile for the current user (post-login). Returns null if not onboarded yet. */
-export async function getProfile(userId: string): Promise<ProfileRow | null> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
+    .select(
+      'id, role, name, phone, roll_no, dept_id, hostel_id, language_pref, onboarded_at',
+    )
     .eq('id', userId)
     .maybeSingle();
+  if (error) throw error;
+  return data as Profile | null;
+}
 
-  if (error) throw toAppError(error);
-  return data;
+/** Call the onboard_student security-definer RPC.
+ *  Validates roll_no, inserts profile with role='student', marks pre_registration used. */
+export async function completeStudentOnboarding(
+  userId: string,
+  input: StudentOnboardInput,
+): Promise<Profile> {
+  const { data, error } = await supabase.rpc('onboard_student', {
+    p_user_id:  userId,
+    p_roll_no:  input.rollNo,
+    p_name:     input.name,
+    p_phone:    input.phone ?? null,
+    p_language: input.language,
+  });
+  if (error) throw error;
+  return data as Profile;
+}
+
+/** Update an existing staff profile (admin pre-creates it; staff fills name/phone/language). */
+export async function completeStaffOnboarding(
+  userId: string,
+  input: StaffOnboardInput,
+): Promise<Profile> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({
+      name:          input.name,
+      phone:         input.phone ?? null,
+      language_pref: input.language,
+      onboarded_at:  new Date().toISOString(),
+    })
+    .eq('id', userId)
+    .select(
+      'id, role, name, phone, roll_no, dept_id, hostel_id, language_pref, onboarded_at',
+    )
+    .single();
+  if (error) throw error;
+  return data as Profile;
+}
+
+/** Check that a roll number is in pre_registered_students and has not been used yet. */
+export async function checkRollNumber(rollNo: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('pre_registered_students')
+    .select('roll_no')
+    .eq('roll_no', rollNo.trim().toUpperCase())
+    .eq('used', false)
+    .maybeSingle();
+  if (error) throw error;
+  return data !== null;
 }

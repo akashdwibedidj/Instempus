@@ -1,4 +1,4 @@
-// App.tsx — application root: providers + router.
+// src/app/App.tsx — root component: providers + router.
 import { Providers } from './providers';
 import { AppRouter } from './router';
 

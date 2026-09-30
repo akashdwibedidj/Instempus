@@ -1,48 +1,66 @@
-// OnboardingPage.tsx — profile setup for a signed-in user with no profile yet.
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '@/app/sessionStore';
 import { ROUTES } from '@/constants/routes';
-import { StudentOnboardForm, StaffOnboardForm } from '@/features/auth';
+import { StudentOnboardForm } from '@/features/auth/components/StudentOnboardForm';
+import { StaffOnboardForm } from '@/features/auth/components/StaffOnboardForm';
+import { getProfile } from '@/features/auth/services/onboardingService';
 
-type Kind = 'student' | 'staff';
+type Mode = 'loading' | 'student' | 'staff';
 
 export default function OnboardingPage() {
-    const { t } = useTranslation();
-    const status = useSessionStore((s) => s.status);
-    const [kind, setKind] = useState<Kind>('student');
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const status = useSessionStore((s) => s.status);
+  const userId = useSessionStore((s) => s.userId);
+  const [mode, setMode] = useState<Mode>('loading');
 
-    if (status === 'loading') {
-        return (
-            <div className="flex h-screen items-center justify-center text-sm text-gray-400">
-                {t('common.loading')}
-            </div>
-        );
-    }
-    if (status === 'unauthenticated') return <Navigate to={ROUTES.LOGIN} replace />;
-    if (status === 'authenticated') return <Navigate to={ROUTES.HOME} replace />;
+  // If user becomes authenticated (onboarding completed), go home.
+  useEffect(() => {
+    if (status === 'authenticated') void navigate(ROUTES.HOME, { replace: true });
+    if (status === 'unauthenticated') void navigate(ROUTES.LOGIN, { replace: true });
+  }, [status, navigate]);
 
-    const tabClass = (active: boolean): string =>
-        'flex-1 rounded-xl px-3 py-2 text-sm transition ' +
-        (active ? 'bg-indigo-500/40 text-white' : 'text-white/60 hover:bg-white/10');
+  // Determine student vs staff by checking if a profile row already exists.
+  useEffect(() => {
+    if (!userId) return;
+    void getProfile(userId).then((profile) => {
+      // Profile exists but no onboarded_at → staff first login
+      // No profile at all → student signup
+      setMode(profile ? 'staff' : 'student');
+    });
+  }, [userId]);
 
-    return (
-        <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-4">
-            <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl">
-                <h1 className="mb-4 text-2xl font-bold text-white">{t('auth.onboard')}</h1>
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 px-4">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white">{t('app.name')}</h1>
+          <p className="mt-1 text-sm text-gray-400">{t('auth.onboard')}</p>
+        </div>
 
-                <div className="mb-5 flex gap-2 rounded-2xl bg-white/5 p-1">
-                    <button type="button" className={tabClass(kind === 'student')} onClick={() => setKind('student')}>
-                        {t('roles.student')}
-                    </button>
-                    <button type="button" className={tabClass(kind === 'staff')} onClick={() => setKind('staff')}>
-                        {t('auth.staff')}
-                    </button>
-                </div>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur">
+          {mode === 'loading' && (
+            <p className="text-center text-sm text-gray-400">{t('common.loading')}</p>
+          )}
+          {mode === 'student' && <StudentOnboardForm />}
+          {mode === 'staff'   && <StaffOnboardForm />}
 
-                {kind === 'student' ? <StudentOnboardForm /> : <StaffOnboardForm />}
-            </div>
-        </main>
-    );
+          <div className="mt-4 pt-4 border-t border-white/10 text-center">
+            <button
+              type="button"
+              onClick={async () => {
+                const { logout } = await import('@/features/auth/services/authService');
+                await logout();
+              }}
+              className="text-xs text-gray-400 hover:text-white transition-colors underline"
+            >
+              Sign out / Back to Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }

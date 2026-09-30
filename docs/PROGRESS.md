@@ -1,14 +1,54 @@
 # PROGRESS — Instempus
 
-Last updated: 2026-09-29 23:47 IST
-Current phase: 2 — Auth & Roles
-Last completed task: Phase 2, Task 1 — authService.ts (login, logout, signUp, getSession, getCurrentUser, onAuthStateChange) + onboardingService.ts (validateRollNo, onboardStudent, onboardStaff, getProfile). tsc --noEmit → 0 errors.
-NEXT STEP (exact): Phase 2, Task 2 — create src/features/auth/hooks/useAuth.ts (Zustand session store + auth hook) and src/app/sessionStore.ts (userId, role, name, language)
-Blocked / needs human: none (run remaining SQL migrations + seed.sql when ready)
-Known issues: database.ts is a stub — profiles table has role typed as string not user_role_enum; will be fixed when types are generated after migrations run
-Recent changes (last 5):
-  - Created src/features/auth/services/authService.ts
-  - Created src/features/auth/services/onboardingService.ts
-  - Created supabase/seed.sql
-  - Created supabase/migrations/010_config.sql
-  - Created supabase/migrations/009_audit_events.sql + 018_rls_audit.sql
+Last updated: 2026-09-30 21:40 IST
+Current phase: 3 — App Shell & UI Kit (Ready to start)
+Last completed task: Phase 2 — Auth & Roles fully verified end-to-end in the browser! (Supabase auth, RLS recursion resolution, student onboarding with RPC, session store, i18n, redirect to /home).
+NEXT STEP (exact): Phase 3, Task 1 — Build the AppShell layout (`src/components/layout/AppShell.tsx`: desktop glassmorphic sidebar + mobile bottom navigation bar + top app bar + notification badge) and wire authenticated routes into it.
+
+---
+
+## Overall Roadmap Status
+
+- [x] **Phase 0 — Setup**: Vite + React + TypeScript, Tailwind CSS, project layout, i18n setup, Supabase client singleton, routing shells.
+- [x] **Phase 1 — Database**: 20 migrations executed in Supabase (org, users, slots, applications, issues, messaging, payments, attendance, audit, config, RLS policies, onboard RPC, profile RLS recursion fix).
+- [x] **Phase 2 — Auth & Roles (COMPLETE & VERIFIED)**:
+  - [x] Task 1 — `authService.ts`, `onboardingService.ts` with Supabase client isolation.
+  - [x] Task 2 — `sessionStore.ts` (loading | unauthenticated | needs_onboarding | authenticated), `useAuthListener.ts` with deadlock-safe auth state change hydration.
+  - [x] Task 3 — Zod validation schemas (`schemas.ts`), `useAuth.ts`, `useOnboarding.ts`.
+  - [x] Task 4 — `LoginForm.tsx` (Sign in / Sign up), `StudentOnboardForm.tsx`, `StaffOnboardForm.tsx`, `LanguagePicker.tsx`.
+  - [x] Task 5 — `RoleGuard.tsx`, `LoginPage.tsx`, `OnboardingPage.tsx`, placeholder `HomePage.tsx`.
+  - [x] Task 6 — Multilingual i18n support (`en.json`, `hi.json`, `or.json`).
+  - [x] Task 7 — Database bug fixes:
+    - `020_fix_profile_rls_recursion.sql`: Converted `current_user_role()`, `current_user_dept_id()`, `current_user_hostel_id()` to `LANGUAGE plpgsql SECURITY DEFINER` to prevent inlining and 42P17 infinite recursion.
+    - Updated `onboard_student` RPC to auto-provision pre-registrations gracefully and seed demo students (`2501CSE001` - `2501CSE020`).
+  - [x] Verified live: User onboarding completed and redirected successfully to `/home`.
+- [ ] **Phase 3 — App Shell & UI Kit (NEXT)**:
+  - [ ] AppShell layout (desktop sidebar + mobile bottom nav + top header).
+  - [ ] UI Component Kit (`Button`, `Input`, `Card`, `Badge`, `Modal`, `Tabs`, `Avatar`, `EmptyState`, `Spinner`).
+  - [ ] Rich Home Page (Announcements & Notices feed, Quick Actions, Role Dashboard widgets).
+- [ ] **Phase 4 — Applications Engine**: Multi-step approval workflows (Leave, Gate Pass, Hostel Leave) with QR verification.
+- [ ] **Phase 5 — Issues Board**: Upvoting, hostel/canteen scope filtering, duplicate detection.
+- [ ] **Phase 6 — Communications**: Department notices, group channels, direct messaging.
+- [ ] **Phase 7 — Attendance**: Offline-first attendance logging, geofenced session verification, sync queue.
+- [ ] **Phase 8 — Payments**: Fee catalog, receipts, mock payment gateway.
+- [ ] **Phase 9 — Analytics & Management**: Admin & Principal analytics overview.
+
+---
+
+## Architectural Decisions & Standards
+
+1. **Auth Service Boundary**: `authService.ts` and `onboardingService.ts` are the ONLY files allowed to import `supabaseClient` inside the auth feature.
+2. **Session State Machine**: Four strictly typed statuses: `loading` → `unauthenticated` | `needs_onboarding` | `authenticated`.
+3. **Role Elevation Security**: Client never directly updates `profiles.role`. Student onboarding is processed via PostgreSQL `onboard_student` security-definer RPC which guarantees `role = 'student'`.
+4. **Database RLS Safety**: All helper functions referenced inside RLS policies are strictly `LANGUAGE plpgsql SECURITY DEFINER` to bypass PostgreSQL function inlining.
+5. **Internationalization**: Complete tri-lingual support for English (`en`), Hindi (`hi`), and Odia (`or`).
+
+---
+
+## Recent Milestones
+
+- Fixed PostgreSQL RLS recursion on `public.profiles` (`020_fix_profile_rls_recursion.sql`).
+- Resolved duplicate `onboard_student` signatures in PostgREST.
+- Pre-seeded `pre_registered_students` table and made onboarding RPC resilient.
+- Added "Sign out / Back to Login" button to `OnboardingPage.tsx` to prevent account lock-in.
+- End-to-end verification succeeded: user created profile and reached `/home`.

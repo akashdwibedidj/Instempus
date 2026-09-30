@@ -1,24 +1,13 @@
-// featureRegistry.ts — single source of truth for all features + their route manifests
-// Add one entry per feature; router.tsx and navigation.ts read this list.
+// featureRegistry.ts — single source of truth for all feature route manifests.
 import { lazy } from 'react';
-import type { LazyExoticComponent, ComponentType } from 'react';
-import { ALL_ROLES, type Role } from '@/constants/roles';
-import { ROUTES } from '@/constants/routes';
-
-export type { Role };
+import type { Role } from '@/constants/roles';
 
 export interface RouteManifest {
-  /** URL path (react-router format) */
   path: string;
-  /** Lazy-loaded page component */
-  component: LazyExoticComponent<ComponentType>;
-  /** Roles that can access this route; empty = public */
-  roles: Role[];
-  /** Nav label i18n key */
+  component: ReturnType<typeof lazy>;
+  roles: Role[];   // empty = any authenticated user allowed
   labelKey?: string;
-  /** lucide-react icon name */
   icon?: string;
-  /** Show in bottom nav / sidebar */
   showInNav?: boolean;
 }
 
@@ -27,31 +16,40 @@ export interface FeatureManifest {
   routes: RouteManifest[];
 }
 
-const LoginPage = lazy(() => import('@/pages/LoginPage'));
-const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
-const HomePage = lazy(() => import('@/pages/HomePage'));
+// ─── auth feature routes (public) ────────────────────────────────────────────
+const authManifest: FeatureManifest = {
+  id: 'auth',
+  routes: [
+    {
+      path: '/login',
+      component: lazy(() => import('@/pages/LoginPage')),
+      roles: [],       // public
+    },
+    {
+      path: '/onboard',
+      component: lazy(() => import('@/pages/OnboardingPage')),
+      roles: [],       // public — guard logic is inside the page
+    },
+  ],
+};
+
+// ─── home (all authenticated roles) ──────────────────────────────────────────
+const homeManifest: FeatureManifest = {
+  id: 'home',
+  routes: [
+    {
+      path: '/home',
+      component: lazy(() => import('@/pages/HomePage')),
+      roles: [],       // any authenticated user (RoleGuard handles redirect)
+      labelKey: 'nav.home',
+      icon: 'Home',
+      showInNav: true,
+    },
+  ],
+};
 
 export const featureRegistry: FeatureManifest[] = [
-  {
-    id: 'auth',
-    routes: [
-      // Public: these pages redirect on their own based on session status.
-      { path: ROUTES.LOGIN, component: LoginPage, roles: [] },
-      { path: ROUTES.ONBOARD, component: OnboardingPage, roles: [] },
-    ],
-  },
-  {
-    // TEMPORARY placeholder until the real home feed (Phase 3+)
-    id: 'home',
-    routes: [
-      {
-        path: ROUTES.HOME,
-        component: HomePage,
-        roles: ALL_ROLES,
-        labelKey: 'nav.home',
-        icon: 'Home',
-        showInNav: true,
-      },
-    ],
-  },
+  authManifest,
+  homeManifest,
+  // Phase 3+: each feature's index.ts pushes its manifest here.
 ];

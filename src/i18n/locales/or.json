@@ -1,0 +1,92 @@
+{
+  "app": { "name": "Instempus" },
+  "nav": {
+    "home": "ହୋମ", "messages": "ବାର୍ତ୍ତା", "applications": "ଆବେଦନ",
+    "dashboard": "ଡ୍ୟାସବୋର୍ଡ", "gatepass": "ଗେଟ ପାସ", "issues": "ସମସ୍ୟା",
+    "attendance": "ଉପସ୍ଥିତି", "payments": "ଦେୟ", "admin": "ଅଡ୍ମିନ",
+    "settings": "ସେଟିଂ", "logout": "ଲଗ ଆଉଟ"
+  },
+  "roles": {
+    "student": "ଛାତ୍ର", "teacher": "ଶିକ୍ଷକ", "hod": "ବିଭାଗ ମୁଖ୍ୟ",
+    "warden": "ୱାର୍ଡ଼େନ", "canteen": "କ୍ୟାଣ୍ଟିନ", "accounts": "ଆକାଉଣ୍ଟ",
+    "security": "ସୁରକ୍ଷା", "admin": "ଅଡ୍ମିନ", "principal": "ପ୍ରଧାନଶିକ୍ଷକ"
+  },
+  "auth": {
+    "login": "ଲଗ ଇନ", "logout": "ଲଗ ଆଉଟ", "email": "ଇମେଲ",
+    "password": "ପାସୱାର୍ଡ", "rollNumber": "ରୋଲ ନମ୍ବର", "name": "ପୂରା ନାମ",
+    "phone": "ମୋବାଇଲ ନମ୍ବର", "language": "ଭାଷା", "signIn": "ସାଇନ ଇନ",
+    "onboard": "ସେଟଅପ ସମ୍ପୂର୍ଣ କରନ୍ତୁ", "welcome": "Instempus କୁ ସ୍ୱାଗତ",
+    "subtitle": "ଆପଣଙ୍କ କ୍ୟାମ୍ପସ, ସଂଯୁକ୍ତ।", "createAccount": "ଆକାଉଣ୍ଟ ଖୋଲନ୍ତୁ",
+    "role": "ଭୂମିକା", "noAccount": "ନୂଆ ଛାତ୍ର? ଆକାଉଣ୍ଟ ଖୋଲନ୍ତୁ",
+    "haveAccount": "ଆଗରୁ ଆକାଉଣ୍ଟ ଅଛି? ସାଇନ ଇନ", "staff": "ଷ୍ଟାଫ",
+    "errors": {
+      "invalidCredentials": "ଅବୈଧ ଇମେଲ ବା ପାସୱାର୍ଡ।",
+      "rollNotFound": "ରୋଲ ନମ୍ବର ମିଳିଲା ନାହିଁ। ଅଡ୍ମିନଙ୍କୁ ଯୋଗାଯୋଗ କରନ୍ତୁ।",
+      "networkError": "ନେଟୱର୍କ ତ୍ରୁଟି। ପୁନଃ ଚେଷ୍ଟା କରନ୍ତୁ।"
+    },
+    "validation": {
+      "emailRequired": "ଇମେଲ ଆବଶ୍ୟକ।", "emailInvalid": "ବୈଧ ଇମେଲ ଦିଅନ୍ତୁ।",
+      "passwordMin": "ପାସୱାର୍ଡ କମ ପକ୍ଷେ 6 ଅକ୍ଷର ହେବ।",
+      "nameRequired": "ପୂରା ନାମ ଦିଅନ୍ତୁ।", "rollRequired": "ରୋଲ ନମ୍ବର ଆବଶ୍ୟକ।",
+      "phoneInvalid": "10 ଅଙ୍କ ମୋବାଇଲ ନମ୍ବର ଦିଅନ୍ତୁ।", "roleInvalid": "ବୈଧ ଭୂମିକା ବାଛନ୍ତୁ।"
+    }
+  },
+  "common": {
+    "loading": "ଲୋଡ ହେଉଛି…", "error": "କିଛି ଭୁଲ ହୋଇଗଲା।",
+    "empty": "ଏଠାରେ ଏବେ କିଛି ନାହିଁ।", "retry": "ପୁନଃ ଚେଷ୍ଟା", "cancel": "ବାତିଲ",
+    "confirm": "ନିଶ୍ଚିତ", "submit": "ଦାଖଲ", "save": "ସଞ୍ଚୟ",
+    "delete": "ଡିଲିଟ", "edit": "ସଂଶୋଧନ", "close": "ବନ୍ଦ",
+    "back": "ପଛକୁ", "next": "ପରବର୍ତ୍ତୀ", "search": "ଖୋଜ", "filter": "ଫିଲ୍ଟର",
+    "all": "ସବୁ", "pending": "ବିଚାରାଧୀନ", "approved": "ଅନୁମୋଦିତ",
+    "declined": "ପ୍ରତ୍ୟାଖ୍ୟାତ", "open": "ଖୋଲା", "resolved": "ସମାଧାନ",
+    "viewAll": "ସବୁ ଦେଖନ୍ତୁ", "seeDetails": "ବିବରଣ ଦେଖନ୍ତୁ"
+  },
+  "applications": {
+    "title": "ଆବେଦନ", "new": "ନୂଆ ଆବେଦନ", "myApplications": "ମୋ ଆବେଦନ",
+    "approvalQueue": "ଅନୁମୋଦନ ସଜ",
+    "status": { "submitted": "ଦାଖଲ", "under_review": "ସମୀକ୍ଷାରେ", "approved": "ଅନୁମୋଦିତ",
+      "declined": "ପ୍ରତ୍ୟାଖ୍ୟାତ", "escalated": "ଏସ୍କାଲେଟ", "cancelled": "ବାତିଲ" },
+    "approve": "ଅନୁମୋଦନ", "decline": "ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "reason": "କାରଣ", "reasonPlaceholder": "କାରଣ ଦିଅନ୍ତୁ…",
+    "uniqueId": "ଆବେଦନ ଆଇଡି", "submittedOn": "ଦାଖଲ ତାରିଖ", "approvedBy": "ଅନୁମୋଦନ କର୍ତ୍ତା",
+    "empty": "କୌଣସି ଆବେଦନ ମିଳିଲା ନାହିଁ।"
+  },
+  "issues": {
+    "title": "ସମସ୍ୟା", "new": "ସମସ୍ୟା ଜଣାନ୍ତୁ", "board": "ସମସ୍ୟା ବୋର୍ଡ",
+    "facingThis": "ମୁଁ ମଧ୍ୟ ଏହା ସହ୍ୟ କରୁଛି", "addComment": "ମନ୍ତବ୍ୟ ଯୋଡ଼ନ୍ତୁ",
+    "similarFound": "ଅନୁରୂପ ସମସ୍ୟା ଆଗରୁ ଅଛି", "viewExisting": "ବିଦ୍ୟମାନ ଦେଖନ୍ତୁ",
+    "status": { "open": "ଖୋଲା", "in_progress": "ଚାଲୁ", "resolved": "ସମାଧାନ", "closed": "ବନ୍ଦ" },
+    "empty": "କୌଣସି ସମସ୍ୟା ରିପୋର୍ଟ ନାହିଁ।"
+  },
+  "payments": {
+    "title": "ଦେୟ", "upload": "ଦେୟ ପ୍ରମାଣ ଅପଲୋଡ",
+    "status": { "pending": "ସତ୍ୟାପନ ବିଚାରାଧୀନ", "confirmed": "ନିଶ୍ଚିତ", "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ" },
+    "receipt": "ରସିଦ ଡାଉନଲୋଡ", "empty": "କୌଣସି ଦେୟ ରେକର୍ଡ ନାହିଁ।"
+  },
+  "attendance": {
+    "title": "ଉପସ୍ଥିତି", "mark": "ଉପସ୍ଥିତି ଚିହ୍ନଟ", "present": "ଉପସ୍ଥିତ",
+    "absent": "ଅନୁପସ୍ଥିତ", "late": "ବିଳମ୍ବ", "percentage": "ଉପସ୍ଥିତି %",
+    "empty": "କୌଣସି ଉପସ୍ଥିତି ରେକର୍ଡ ନାହିଁ।"
+  },
+  "notices": {
+    "title": "ବିଜ୍ଞପ୍ତି", "post": "ବିଜ୍ଞପ୍ତି ପୋଷ୍ଟ", "targetGroup": "ଲକ୍ଷ୍ୟ ଗ୍ରୁପ",
+    "readBy": "ପଢ଼ାଗଲା", "empty": "ଆପାତତଃ କୌଣସି ବିଜ୍ଞପ୍ତି ନାହିଁ।"
+  },
+  "gatepass": {
+    "title": "ଗେଟ ପାସ", "request": "ଗେଟ ପାସ ଅନୁରୋଧ", "reason": "ବାହାରକୁ ଯିବାର କାରଣ",
+    "outTime": "ବାହାର ସମୟ", "returnTime": "ଫେରିବା ସମୟ", "validUntil": "ପର୍ଯ୍ୟନ୍ତ ବୈଧ",
+    "status": { "valid": "✓ ବୈଧ", "expired": "✗ ମ୍ୟାଦ ଶେଷ", "used": "✗ ପୂର୍ବେ ବ୍ୟବହୃତ", "pending": "ଅନୁମୋଦନ ବିଚାରାଧୀନ" },
+    "scanQR": "ଗେଟ ପାସ QR ସ୍କ୍ୟାନ", "empty": "ଆପାତତଃ କୌଣସି ଗେଟ ପାସ ନାହିଁ।"
+  },
+  "admin": {
+    "title": "ଅଡ୍ମିନ", "dashboard": "ଡ୍ୟାସବୋର୍ଡ", "users": "ବ୍ୟବହାରକାରୀ",
+    "org": "ସଂଗଠନ", "settings": "ସେଟିଂ", "auditLog": "ଅଡିଟ ଲଗ",
+    "pending": "ବିଚାରାଧୀନ", "ageing": "ପୁରୁଣା", "workload": "କାର୍ଯ୍ୟଭାର"
+  },
+  "validation": {
+    "emailRequired": "ଇମେଲ ଆବଶ୍ୟକ।", "emailInvalid": "ବୈଧ ଇମେଲ ଦିଅନ୍ତୁ।",
+    "passwordMin": "ପାସୱାର୍ଡ କମ ପକ୍ଷେ 8 ଅକ୍ଷର।",
+    "nameRequired": "ପୂରା ନାମ ଦିଅନ୍ତୁ।", "rollRequired": "ରୋଲ ନମ୍ବର ଆବଶ୍ୟକ।",
+    "phoneInvalid": "10 ଅଙ୍କ ମୋବାଇଲ ଦିଅନ୍ତୁ।", "roleInvalid": "ବୈଧ ଭୂମିକା ବାଛନ୍ତୁ।"
+  }
+}

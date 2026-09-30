@@ -1,5 +1,6 @@
-// useAuthListener.ts — mount ONCE (in providers.tsx). Keeps sessionStore in sync
-// with Supabase auth: on every auth change it loads the profile and fills the store.
+// useAuthListener.ts — mount ONCE in providers.tsx.
+// Listens to Supabase auth state changes and keeps sessionStore in sync.
+// No Supabase import here — all calls go through authService / onboardingService.
 import { useEffect } from 'react';
 import type { User } from '@supabase/supabase-js';
 import i18n from '@/i18n';
@@ -8,52 +9,52 @@ import { useSessionStore, toLanguage } from '@/app/sessionStore';
 import { onAuthStateChange } from '../services/authService';
 import { getProfile } from '../services/onboardingService';
 
+async function hydrate(
+  user: User | null,
+  signal: { cancelled: boolean },
+): Promise<void> {
+  const store = useSessionStore.getState();
+
+  if (!user) {
+    if (!signal.cancelled) store.clear();
+    return;
+  }
+
+  try {
+    const profile = await getProfile(user.id);
+    if (signal.cancelled) return;
+
+    if (!profile || !profile.onboarded_at) {
+      store.setNeedsOnboarding(user.id);
+      return;
+    }
+
+    const language = toLanguage(profile.language_pref);
+    store.setAuthenticated({
+      userId: user.id,
+      role: profile.role as Role,
+      name: profile.name,
+      language,
+    });
+    void i18n.changeLanguage(language);
+  } catch (err) {
+    if (signal.cancelled) return;
+    console.error('[auth] failed to load profile', err);
+    store.clear();
+  }
+}
+
 export function useAuthListener(): void {
   useEffect(() => {
-    let cancelled = false;
-    let latest = 0; // ignore out-of-order async results
+    const signal = { cancelled: false };
 
-    const hydrate = async (user: User | null): Promise<void> => {
-      const run = ++latest;
-      const store = useSessionStore.getState();
-
-      if (!user) {
-        store.clear();
-        return;
-      }
-
-      try {
-        const profile = await getProfile(user.id);
-        if (cancelled || run !== latest) return;
-
-        if (!profile) {
-          store.setNeedsOnboarding(user.id);
-          return;
-        }
-
-        const language = toLanguage(profile.language_pref);
-        store.setAuthenticated({
-          userId: user.id,
-          role: profile.role as Role,
-          name: profile.name,
-          language,
-        });
-        void i18n.changeLanguage(language);
-      } catch (err) {
-        if (cancelled || run !== latest) return;
-        console.error('[auth] failed to load profile', err);
-        store.clear();
-      }
-    };
-
+    // Defer Supabase call out of the auth callback to avoid deadlocks.
     const unsubscribe = onAuthStateChange((user) => {
-      // Do NOT call Supabase inside this callback directly (can deadlock
-      // supabase-js). Defer to the next tick.
-      setTimeout(() => void hydrate(user), 0);
+      setTimeout(() => void hydrate(user, signal), 0);
     });
 
     return () => {
-      cancelled = true;
+      signal.cancelled = true;
       unsubscribe();
     };
   }, []);
