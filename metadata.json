@@ -1,0 +1,6 @@
+{
+  "name": "Instempus",
+  "description": "Unified role-aware college campus operations platform: smart gate pass QR verification, verified notices feed, hostel & campus issue board, direct messaging, and role dashboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
