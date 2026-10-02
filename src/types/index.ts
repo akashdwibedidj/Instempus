@@ -71,12 +71,35 @@ export interface GatePass {
   reason: string;
   destination: string;
   parentContact: string;
-  approvedBy: string;
-  approvedAt: string;
-  qrToken: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  digitalSignature?: string;
+  qrToken?: string;
   status: PassStatus;
   guardNotes?: string;
   verifiedByGuard?: string;
+}
+
+export interface AIChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+}
+
+export interface StudentDirectoryItem {
+  rollNo: string;
+  name: string;
+  department: string;
+  semester: number;
+  section: string;
+  hostelBlock?: string;
+  roomNo?: string;
+  avatarUrl: string;
+  phone?: string;
 }
 
 export interface NoticePost {
